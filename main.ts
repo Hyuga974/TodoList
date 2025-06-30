@@ -7,7 +7,7 @@ const newItem = todoList.create("Buy groceries", "Milk, Bread, Eggs");
 console.log("Created Item:", newItem);
 // Read all todo items
 const items = todoList.read();
-console.log("All Items:", items);
+console.log("All Items:",items);
 // Update an existing todo item
 const updatedItem = todoList.update(newItem.id, "Buy groceries and fruits", "Milk, Bread, Eggs, Apples", "progress");
 console.log("Updated Item:", updatedItem);

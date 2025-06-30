@@ -5,12 +5,13 @@ export class TodoList {
     private nextId: number = 1;
 
     create(title: string, description: string): ITodoItem {
-        const item: TodoItem = {
-            id: this.nextId++,
+        const item = new TodoItem(
+            this.nextId++,
             title,
-            description,
-            status: 'waiting'
-        };
+            description, 
+            new Date(),
+            'waiting'
+        )
         this.items.push(item);
         return item;
     }
