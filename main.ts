@@ -1,0 +1,20 @@
+import { TodoList } from "./todoList";
+
+const todoList = new TodoList();
+
+// Create a new todo item
+const newItem = todoList.create("Buy groceries", "Milk, Bread, Eggs");
+console.log("Created Item:", newItem);
+// Read all todo items
+const items = todoList.read();
+console.log("All Items:", items);
+// Update an existing todo item
+const updatedItem = todoList.update(newItem.id, "Buy groceries and fruits", "Milk, Bread, Eggs, Apples", "progress");
+console.log("Updated Item:", updatedItem);
+// Delete a todo item
+const deleteResult = todoList.delete(newItem.id);
+console.log("Delete Result:", deleteResult);    
+// Read all todo items after deletion
+const itemsAfterDelete = todoList.read();
+console.log("Items After Deletion:", itemsAfterDelete);
+
