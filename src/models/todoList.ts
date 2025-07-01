@@ -36,15 +36,27 @@ export class TodoList {
         }
     }
 
-    update(id: number, newTitle?: string, newDescription?: string, newStatus?: 'waiting' | 'progress' | 'completed'): TodoItem  {
+    update(id: number, newTitle?: string, newDescription?: string): TodoItem  {
         const item = this.items.find(i => i.id === id);
         if (item) {
-            if (newTitle !== undefined) item.title = newTitle;
-            if (newDescription !== undefined) item.description = newDescription;
-            if (newStatus !== undefined) item.status = newStatus;
+            if (newTitle !== undefined && newTitle.length <100){
+                if (newTitle.trim() === "") {
+                    throw new Error("Title is required");
+                } else {
+                    item.title = newTitle;
+                }
+            } else if (newTitle !== undefined && newTitle.length >= 100) {
+                throw new Error("Title cannot exceed 100 characters");
+            }
+            if (newDescription !== undefined){
+                if (newDescription.length > 500) {
+                    throw new Error("Description cannot exceed 500 characters");
+                }
+                item.description = newDescription;
+            } 
             return item;
         } else {
-            throw new Error(`TodoItem with id ${id} not found`);
+            throw new Error(`Task not found`);
         }
     }
 
