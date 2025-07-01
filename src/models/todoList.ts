@@ -73,7 +73,7 @@ export class TodoList {
 
         const item = this.items.find(i => i.id === id);
         if (!item) throw new Error(`Task not found`);
-        
+
         switch (item.status) {
             case 'waiting':
                 item.status = 'progress';
@@ -93,7 +93,7 @@ export class TodoList {
             this.items.splice(index, 1);
             return true;
         } else {
-            throw new Error(`This item is not found`);
+            throw new Error(`Task not found`);
         }
     }
 }
