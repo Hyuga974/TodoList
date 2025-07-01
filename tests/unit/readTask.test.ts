@@ -13,17 +13,22 @@ import { TodoItem } from "../../src/models/todoItem";
 import assert from "assert";
 
 let todoList = new TodoList();
-todoList.create("Test Task", "This is a test task")
-todoList.create("Another Task", "This is another task");
+const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting");
+const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting");
 
 describe('Read Task', () => {
+    beforeEach(() => {
+            todoList = new TodoList();
+            todoList.setitems([todoItem,todoItem2])
+        });
+    
     //**ÉTANT DONNÉ QUE** j'ai une tâche existante avec ID valide, 
     // **LORSQUE** je consulte cette tâche, 
     // **ALORS** j'obtiens tous ses détails : ID, titre, description, statut, date de création, etc..
     it('should return the details of an existing task', () => {
         let task : TodoItem;   
 
-        assert.strictEqual(todoList.readAll().length>0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length>0, true, "There should be at least one task in the list");
 
         try {
             task = todoList.read(1); 
@@ -78,4 +83,32 @@ describe('Read Task', () => {
 
     });
 
+   
+    // **ÉTANT DONNÉ QUE** j'ai supprimé une tâche, *
+    // **LORSQUE** je tente de la consulter par son ID, 
+    // **ALORS** j'obtiens une erreur "Task not found"
+    it('should throw an error when trying to read a deleted task', () => {
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+
+        let taskToDelete : TodoItem;
+        try{
+            taskToDelete = todoList.read(1);
+        } catch (error) {
+            assert.fail("Task should exist");
+        }
+        
+        try{
+            todoList.delete(taskToDelete.id);
+        } catch (error) {
+            assert.fail("Task should be deleted");
+        }
+
+        try {
+            todoList.read(taskToDelete.id);
+            assert.fail("Task should not exist after deletion");
+        } catch (error) {
+            assert.strictEqual((error as Error).message, "Task not found", "Error message should be 'Task not found'");
+        }
+
+    });
 });

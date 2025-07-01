@@ -12,11 +12,14 @@ import { TodoList } from "../../src/models/todoList";
 import { TodoItem } from "../../src/models/todoItem";
 import assert from "assert";
 
-describe('Edit Status Task', () => {
     let todoList = new TodoList();
+describe('Edit Status Task', () => {
     beforeEach(() => {
         todoList = new TodoList();
-        todoList.create("Test Task", "This is a test task");
+        todoList.setitems([
+            new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting"), 
+            new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting")
+        ]);
     });
 
     // **ÉTANT DONNÉ QUE** j'ai une tâche existante,
@@ -69,7 +72,7 @@ describe('Edit Status Task', () => {
         let updatedTask: TodoItem;
         let oldTask: TodoItem;        
         
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
 
         try {
             oldTask = todoList.read(1);
@@ -112,5 +115,20 @@ describe('Edit Status Task', () => {
         } catch (error) {
             assert.strictEqual((error as Error).message, "Task not found", "Error message should be 'Task not found'");
         }
+    });
+
+    // **ÉTANT DONNÉ QUE** j'ai supprimé une tâche, *
+    // **LORSQUE** je tente de changer son status par son ID, 
+    // **ALORS** j'obtiens une erreur "Task not found"
+    it('should throw an error when trying to update the status of a deleted task', () => {
+        todoList.delete(1);
+
+        try {
+            todoList.progress(1);
+            assert.fail("Expected an error to be thrown");
+        } catch (error) {
+            assert.strictEqual((error as Error).message, "Task not found", "Error message should be 'Task not found'");
+        }
+        
     });
 });

@@ -18,13 +18,19 @@ import { TodoItem } from '../../src/models/todoItem';
 */
 
 
-let todoList = new TodoList();
-const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting");
-const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting");
-todoList.create("Test Task", "This is a test task",)
-todoList.create("Another Task", "This is another task");
+let todoList: TodoList;
+let todoItem : TodoItem
+let todoItem2 : TodoItem
 
 describe('TodoList', () => {
+    let todoList : TodoList;
+    beforeEach(() => {
+        todoList = new TodoList();
+        todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting");
+        todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting");
+        todoList.create("Test Task", "This is a test task",)
+        todoList.create("Another Task", "This is another task");
+    })
     //**ÉTANT DONNÉ QUE** je fournis un titre valide (non vide, maximum 100 caractères), 
     // **LORSQUE** je crée une tâche, 
     // **ALORS** elle est créée avec un ID unique, le titre fourni, une description vide par défaut, une date de création et le statut "TODO"
@@ -156,66 +162,3 @@ describe('TodoList', () => {
         assert.ok(Math.abs(currentDate.getTime() - createdAtDate.getTime()) < 1000, "CreatedAt should be within 1 second of the current date");
     })
 });
-
-export function testCreateTodoItemWithValidTitleAndDefaultDateDescriptionAndStatus() {
-    const title = "Valid Task Title";
-    const todoItem = todoList.create(title, "");
-
-    const count = todoList.readAll().filter(item => item.id === todoItem.id).length;
-    console.log(todoList.readAll().length);
-    console.log(todoItem.id);
-    console.log(count);
-
-    assert.strictEqual(count == 1,true, "UID should be unique");
-    assert.strictEqual(todoItem.id > 0, true, "ID should be greater than 0");
-    assert.strictEqual(todoItem.title === title, true, "Title should match the provided title");
-    assert.strictEqual(todoItem.description === "", true, "Description should be empty by default");
-    assert.strictEqual(todoItem.createdAt === null, false, "CreatedAt should not be null");
-    assert.strictEqual(todoItem.createdAt instanceof Date, true, "CreatedAt should be a Date object");
-    assert.strictEqual(todoItem.status === null, false, "Status should not be null");
-    assert.strictEqual(todoItem.status === "waiting", true, "Status should be 'waiting' by default");
-
-    console.log('✅ Test US001-1 finished\n');
-}
-
-//- **ÉTANT DONNÉ QUE** je fournis un titre et une description valide (maximum 500 caractères), 
-// **LORSQUE** je crée une tâche, 
-// **ALORS** elle est créée avec le titre et la description fournis
-export function testCreateTodoItemWithValidTitleAndDescription() {
-}
-
-//**ÉTANT DONNÉ QUE** je fournis un titre vide ou composé uniquement d'espaces, 
-// **LORSQUE** je tente de créer une tâche, 
-// **ALORS** j'obtiens une erreur "Title is required"
-export function testCreateTodoItemWithEmptyTitle() {
-}
-
-//**ÉTANT DONNÉ QUE** je fournis un titre de plus de 100 caractères, 
-// **LORSQUE** je tente de créer une tâche, 
-// **ALORS** j'obtiens une erreur "Title cannot exceed 100 characters"
-export function testCreateTodoItemWithTitleExceedingMaxLength() {
-}
-
-//- **ÉTANT DONNÉ QUE** je fournis une description de plus de 500 caractères, 
-// **LORSQUE** je tente de créer une tâche, 
-// **ALORS** j'obtiens une erreur "Description cannot exceed 500 characters"
-export function testCreateTodoItemWithDescriptionExceedingMaxLength() {
-}
-
-//- **ÉTANT DONNÉ QUE** je fournis une titre qui commence et/ou termine par des espace, 
-// **LORSQUE** je crée une tâche, 
-// **ALORS** elle est créee avec le titre fourni, sans espaces au début ni à la fin
-export function testCreateTodoItemWithTitleContainingLeadingAndTrailingSpaces() {
-}
-
-//- **ÉTANT DONNÉ QUE** j'ai une tâche nouvellement créée, 
-// **LORSQUE** je la consulte, 
-// **ALORS** sa date de création correspond au moment de création à la seconde près
-export function testCreateTodoItemWithCreationDate() {
-}
-
-// try {
-//     testCreateTodoItemWithValidTitleAndDefaultDateDescriptionAndStatus()
-// } catch (error) {
-//     console.error("Error in testCreateTodoItemWithValidTitleAndDefaultDateDescriptionAndStatus:", error);
-// }

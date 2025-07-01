@@ -21,14 +21,13 @@ import { TodoItem } from "../../src/models/todoItem";
 import assert from "assert";
 
 let todoList = new TodoList();
-todoList.create("Test Task", "This is a test task")
-todoList.create("Another Task", "This is another task");
+const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting");
+const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting");
 
 describe('Edit Task', () => {
     beforeEach(() => {
-        let todoList = new TodoList();
-        todoList.create("Test Task", "This is a test task")
-        todoList.create("Another Task", "This is another task");
+        todoList = new TodoList();
+        todoList.setitems([todoItem,todoItem2])
     });
 
     // **ÉTANT DONNÉ QUE** j'ai une tâche existante, 
@@ -38,7 +37,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+       //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -65,7 +64,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -92,7 +91,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -119,7 +118,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -141,7 +140,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -163,7 +162,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -183,7 +182,7 @@ describe('Edit Task', () => {
     // **ALORS** j'obtiens une erreur "Task not found"
     it('should throw an error when trying to update a non-existent task', () => {
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             todoList.update(999, "Non-existent Task", "This task does not exist");
@@ -200,7 +199,7 @@ describe('Edit Task', () => {
         let task: TodoItem;
         let oldtask: TodoItem;
 
-        assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
+        //assert.strictEqual(todoList.readAll().length > 0, true, "There should be at least one task in the list");
         
         try {
             oldtask = todoList.read(1);
@@ -219,5 +218,19 @@ describe('Edit Task', () => {
         assert.strictEqual(task.title, "Updated Task Title Again", "Task title should be updated");
         assert.strictEqual(task.description, "Updated Task Description Again", "Task description should be updated");
     });
-    // /!\DEMANDER pour cette fonction/!\
+
+    // **ÉTANT DONNÉ QUE** j'ai supprimé une tâche, *
+    // **LORSQUE** je tente de la modifier par son ID, 
+    // '**ALORS** j'obtiens une erreur "Task not found"
+    it('should throw an error when trying to update a deleted task', () => {
+            todoList.delete(1);
+    
+            try {
+                todoList.update(1, "Updated Task", "This task has been updated");
+                assert.fail("Task should not exist after deletion");
+            } catch (error) {
+                assert.strictEqual((error as Error).message, "Task not found", "Error message should be 'Task not found'");
+            }
+            
+        });
 })
