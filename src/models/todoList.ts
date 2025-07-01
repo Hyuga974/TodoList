@@ -106,4 +106,21 @@ export class TodoList {
             throw new Error(`Task not found`);
         }
     }
+
+    search(keyword: string): TodoItem[] {
+        if (typeof keyword !== 'string') {
+            throw new Error("Keyword must be a string");
+        }
+        if (keyword.trim() === "") {
+            return [...this.items];
+        }
+
+        const lowerKeyword = keyword.toLowerCase();
+        const results = this.items.filter(item => 
+            item.title.toLowerCase().includes(lowerKeyword) || 
+            item.description.toLowerCase().includes(lowerKeyword)
+        );
+
+        return results;
+    }
 }
