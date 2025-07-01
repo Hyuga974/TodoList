@@ -16,8 +16,24 @@ export class TodoList {
         return item;
     }
 
-    read(): TodoItem[] {
+    readAll(): TodoItem[] {
+        console.log("Reading all tasks...");
+        if (this.items.length === 0) {
+            throw new Error("No tasks available");
+        }
         return [...this.items];
+    }
+
+    read(id: number): TodoItem {
+        if (typeof id !== 'number' || id <= 0) {
+            throw new Error("Invalid ID format");
+        }
+        const item = this.items.find(i => i.id === id);
+        if (item) {
+            return item;
+        } else {
+            throw new Error(`Task not found`);
+        }
     }
 
     update(id: number, newTitle?: string, newDescription?: string, newStatus?: 'waiting' | 'progress' | 'completed'): TodoItem  {

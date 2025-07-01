@@ -1,6 +1,6 @@
 import assert from 'assert';
-import { TodoList } from '../../todoList';
-import { TodoItem } from '../../todoItem';
+import { TodoList } from '../../src/models/todoList';
+import { TodoItem } from '../../src/models/todoItem';
 
 /* 
 **En tant qu'** utilisateur,  
@@ -32,7 +32,7 @@ describe('TodoList', () => {
         const title = "Valid Task Title";
         const todoItem = todoList.create(title, "");
 
-        const count = todoList.read().filter(item => item.id === todoItem.id).length;
+        const count = todoList.readAll().filter(item => item.id === todoItem.id).length;
 
         assert.strictEqual(count, 1, "UID should be unique");
         assert.ok(todoItem.id > 0, "ID should be greater than 0");
@@ -161,8 +161,8 @@ export function testCreateTodoItemWithValidTitleAndDefaultDateDescriptionAndStat
     const title = "Valid Task Title";
     const todoItem = todoList.create(title, "");
 
-    const count = todoList.read().filter(item => item.id === todoItem.id).length;
-    console.log(todoList.read().length);
+    const count = todoList.readAll().filter(item => item.id === todoItem.id).length;
+    console.log(todoList.readAll().length);
     console.log(todoItem.id);
     console.log(count);
 
