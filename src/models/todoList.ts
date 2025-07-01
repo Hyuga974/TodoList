@@ -60,6 +60,33 @@ export class TodoList {
         }
     }
 
+    progress(id: number): TodoItem {
+        if (typeof id !== 'number' || id <= 0) {
+            throw new Error("Invalid ID format");
+        }
+
+        try {
+            this.read(id);
+        } catch (error) {
+            throw new Error(`Task not found`);
+        }
+
+        const item = this.items.find(i => i.id === id);
+        if (!item) throw new Error(`Task not found`);
+        
+        switch (item.status) {
+            case 'waiting':
+                item.status = 'progress';
+                break;
+            case 'progress':
+                item.status = 'completed';
+                break;
+            default:
+                throw new Error("Invalid status");
+        }
+        return item;
+    }
+
     delete(id: number): string | boolean {
         const index = this.items.findIndex(i => i.id === id);
         if (index !== -1) {
