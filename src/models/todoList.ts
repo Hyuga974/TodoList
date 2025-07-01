@@ -4,6 +4,21 @@ export class TodoList {
     private items: TodoItem[] = [];
     private nextId: number = 1;
 
+    // TODO : Init items
+    setitems(tasks: TodoItem[]): void {
+        if (!Array.isArray(tasks)) {
+            throw new Error("Items must be an array");
+        }
+        for (const task of tasks) {
+            if (!(task instanceof TodoItem)) {
+                throw new Error("All items must be instances of TodoItem");
+            }
+        }
+        this.items = tasks.map(task => {
+            return task;
+        });
+    }
+
     create(title: string, description: string): ITodoItem {
         const item = new TodoItem(
             this.nextId++,
@@ -36,6 +51,7 @@ export class TodoList {
         }
     }
 
+    // Faire une copie e l'item avant de la réinsérer dans le tableau
     update(id: number, newTitle?: string, newDescription?: string): TodoItem  {
         const item = this.items.find(i => i.id === id);
         if (item) {
@@ -63,12 +79,6 @@ export class TodoList {
     progress(id: number): TodoItem {
         if (typeof id !== 'number' || id <= 0) {
             throw new Error("Invalid ID format");
-        }
-
-        try {
-            this.read(id);
-        } catch (error) {
-            throw new Error(`Task not found`);
         }
 
         const item = this.items.find(i => i.id === id);
