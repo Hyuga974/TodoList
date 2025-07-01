@@ -123,4 +123,14 @@ export class TodoList {
 
         return results;
     }
+
+    filterByStatus(status: string): TodoItem[] {
+        const validStatuses = ['waiting', 'progress', 'completed'];
+        if (!validStatuses.includes(status)) {
+            throw new Error("Invalid filter status");
+        }
+
+        const results = this.items.filter(item => item.status === status);
+        return results;
+    }
 }
