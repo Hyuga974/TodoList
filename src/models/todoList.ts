@@ -107,16 +107,36 @@ export class TodoList {
         }
     }
 
-    search(keyword: string): TodoItem[] {
+    search(
+        keyword: string ="",
+        status : "waiting" | "progress" | "completed" | "" = "",
+        criteria: "id" | "date" | "title" | "status" = "id",
+        order: "asc" | "desc" = "desc"
+    ): TodoItem[] {
         if (typeof keyword !== 'string') {
             throw new Error("Keyword must be a string");
         }
+        let results: TodoItem[] = [...this.items];
+        try{
+            results = this.sortBy(criteria, order);
+        } catch (_) {
+            
+        }
+
+        if (status !== ""){
+            try{
+                results = this.filterByStatus(status);
+            } catch (_) {
+                
+            }
+        }
+
         if (keyword.trim() === "") {
-            return [...this.items];
+            return results;
         }
 
         const lowerKeyword = keyword.toLowerCase();
-        const results = this.items.filter(item => 
+        results = results.filter(item => 
             item.title.toLowerCase().includes(lowerKeyword) || 
             item.description.toLowerCase().includes(lowerKeyword)
         );
