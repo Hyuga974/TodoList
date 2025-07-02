@@ -20,9 +20,9 @@ import { TodoList } from "../../src/models/todoList";
 
 describe("Search task", ()=>{
     let todoList : TodoList;
-    const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting");
-    const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting");
-    const todoItem3 = new TodoItem(3, "Another Task Again", "This is again an other task", new Date(), "waiting");
+    const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date("2025-07-01"), "waiting");
+    const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date("2025-07-02"), "waiting");
+    const todoItem3 = new TodoItem(3, "Another Task Again", "This is again an other task", new Date("2025-07-03"), "waiting");
     
     beforeEach(()=>{
         todoList = new TodoList();
@@ -48,7 +48,7 @@ describe("Search task", ()=>{
     // **ALORS** seules les tâches correspondantes sont retournées
     it("should return tasks matching the keyword in the description", () => {
         const result = todoList.search("another");
-        const expected = [todoItem2, todoItem3];
+        const expected = [todoItem3, todoItem2];
 
         assert.deepEqual(result, expected, "Should return tasks matching the keyword in the description");
     });
@@ -57,10 +57,10 @@ describe("Search task", ()=>{
     // **LORSQUE** je recherche ce terme, 
     // **ALORS** toutes ces tâches sont retournées (sans doublon)
     it("should return tasks matching the keyword in title and description", () => {
-        const todoItem4 = new TodoItem(4, "Another Test", "This is a test task with another keyword", new Date(), "waiting");
+        const todoItem4 = new TodoItem(4, "Another Test", "This is a test task with another keyword", new Date("2025-08-07"), "waiting");
         todoList.setitems([ todoItem, todoItem2, todoItem3, todoItem4 ]);
         const result = todoList.search("task");
-        const expected = [todoItem, todoItem2, todoItem3, todoItem4];
+        const expected = [todoItem4, todoItem3, todoItem2, todoItem];
 
         assert.deepEqual(result, expected, "Should return tasks matching the keyword in both title and description");
     });
@@ -80,7 +80,7 @@ describe("Search task", ()=>{
     // **ALORS** toutes les tâches sont retournées
     it("should return all tasks when searching with an empty string", () => {
         const result = todoList.search("");
-        const expected = [todoItem, todoItem2, todoItem3];
+        const expected = [todoItem3, todoItem2, todoItem];
 
         assert.deepEqual(result, expected, "Should return all tasks when searching with an empty string");
     });

@@ -15,9 +15,9 @@ import assert from "assert";
 
 describe("Filter task", () => {
     let todoList : TodoList;
-    const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date(), "waiting");
-    const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date(), "waiting");
-    const todoItem3 = new TodoItem(3, "Another Task Again", "This is again an other task", new Date(), "waiting");
+    const todoItem = new TodoItem(1, "Test Task", "This is a test task", new Date("2025-07-01"), "waiting");
+    const todoItem2 = new TodoItem(2, "Another Task", "This is another task", new Date("2025-07-02"), "waiting");
+    const todoItem3 = new TodoItem(3, "Another Task Again", "This is again an other task", new Date("2025-07-03"), "waiting");
     
     beforeEach(()=>{
         todoList = new TodoList();
@@ -32,8 +32,8 @@ describe("Filter task", () => {
     // **LORSQUE** je filtre par "TODO", "ONGOING" ou "DONE", 
     // **ALORS** seules les tâches avec le statut correspondant sont retournées
     it("should return tasks with the status 'waiting'", () => {
-        const result = todoList.filterByStatus("waiting");
-        const expected = [todoItem, todoItem2, todoItem3];
+        const result = todoList.search("", "waiting");
+        const expected = [todoItem3, todoItem2, todoItem];
 
         assert.deepEqual(result, expected, "Should return tasks with the status 'waiting'");
     });
@@ -41,7 +41,7 @@ describe("Filter task", () => {
         const todoItem4 = new TodoItem(4, "In Progress Task", "This task is in progress", new Date(), "progress");
         todoList.setitems([todoItem, todoItem2, todoItem3, todoItem4]);
         
-        const result = todoList.filterByStatus("progress");
+        const result = todoList.search("", "progress");
         const expected = [todoItem4];
 
         assert.deepEqual(result, expected, "Should return tasks with the status 'progress'");
@@ -50,7 +50,7 @@ describe("Filter task", () => {
         const todoItem4 = new TodoItem(4, "Completed Task", "This task is completed", new Date(), "completed");
         todoList.setitems([todoItem, todoItem2, todoItem3, todoItem4]);
         
-        const result = todoList.filterByStatus("completed");
+        const result = todoList.search("", "completed");
         const expected = [todoItem4];
 
         assert.deepEqual(result, expected, "Should return tasks with the status 'completed'");
@@ -60,7 +60,7 @@ describe("Filter task", () => {
     // **LORSQUE** j'applique le filtre, 
     // **ALORS** j'obtiens une liste vide
     it("should return an empty list when no tasks match the status 'completed'", () => {
-        const result = todoList.filterByStatus("completed");
+        const result = todoList.search("", "completed");
         const expected: TodoItem[] = [];
 
         assert.deepEqual(result, expected, "Should return an empty list when no tasks match the status 'completed'");
@@ -71,7 +71,7 @@ describe("Filter task", () => {
     // **ALORS** j'obtiens une erreur "Invalid filter status"
     it("should throw an error when filtering by an invalid status", () => {
         try {
-            todoList.filterByStatus("abc");
+            todoList.search("", "abc");
             assert.fail("Expected an error to be thrown");
         } catch (error) {
             assert.strictEqual((error as Error).message, "Invalid filter status", "Error message should be 'Invalid filter status'");

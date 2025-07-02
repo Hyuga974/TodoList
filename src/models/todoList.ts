@@ -108,41 +108,38 @@ export class TodoList {
     }
 
     search(
-        keyword: string ="",
-        status : "waiting" | "progress" | "completed" | "" = "",
-        criteria: "id" | "date" | "title" | "status" = "id",
-        order: "asc" | "desc" = "desc"
+    keyword: string = "",
+    status: string = "",
+    criteria: string = "",
+    order: string = ""
     ): TodoItem[] {
         if (typeof keyword !== 'string') {
             throw new Error("Keyword must be a string");
         }
+
         let results: TodoItem[] = [...this.items];
-        try{
-            results = this.sortBy(criteria, order);
-        } catch (_) {
-            
+
+        if (status !== "") {
+            results = this.filterByStatus(status);
         }
 
-        if (status !== ""){
-            try{
-                results = this.filterByStatus(status);
-            } catch (_) {
-                
-            }
+        if (criteria !== "") {
+            results = this.sortBy(criteria, order, results);
+        } else {
+            results = this.sortBy("date", "desc", results);
         }
 
-        if (keyword.trim() === "") {
-            return results;
+        if (keyword.trim() !== "") {
+            const lowerKeyword = keyword.toLowerCase();
+            results = results.filter(item =>
+                item.title.toLowerCase().includes(lowerKeyword) ||
+                item.description.toLowerCase().includes(lowerKeyword)
+            );
         }
-
-        const lowerKeyword = keyword.toLowerCase();
-        results = results.filter(item => 
-            item.title.toLowerCase().includes(lowerKeyword) || 
-            item.description.toLowerCase().includes(lowerKeyword)
-        );
 
         return results;
     }
+
 
     filterByStatus(status: string): TodoItem[] {
         const validStatuses = ['waiting', 'progress', 'completed'];
