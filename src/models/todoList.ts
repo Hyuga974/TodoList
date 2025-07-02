@@ -133,4 +133,45 @@ export class TodoList {
         const results = this.items.filter(item => item.status === status);
         return results;
     }
+
+    sortBy(criteria: string = "date", order: string = "desc", filterList : TodoItem[]=this.items): TodoItem[] {
+        const validCriteria = ['date', 'title', 'status'];
+        const validOrders = ['asc', 'desc'];
+
+        if (!validCriteria.includes(criteria)) {
+            throw new Error("Invalid sort criteria");
+        }
+        if (!validOrders.includes(order)) {
+            throw new Error("Invalid sort order");
+        }
+
+        let sortedItems = [...filterList];
+        switch (criteria) {
+            case 'date':
+                sortedItems.sort((a, b) => {
+                    return b.createdAt.getTime() - a.createdAt.getTime();
+                });
+                break;
+            case 'title':
+                sortedItems.sort((a, b) => {
+                    return b.title.localeCompare(a.title)
+                }
+                );
+                break;
+            case 'status':
+                const statusOrder = ['waiting', 'progress', 'completed'];
+                sortedItems.sort((a, b) => {
+                    return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+                }
+                );
+                break;
+            default:
+                throw new Error("Invalid sort criteria");
+        }
+        if (order === 'asc' && criteria !== 'status') {
+            sortedItems.reverse();
+        }
+        return sortedItems;
+
+    }
 }
