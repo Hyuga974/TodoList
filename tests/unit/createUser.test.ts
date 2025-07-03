@@ -12,25 +12,21 @@
 
 */
 
-import { User } from '../../src/models/user';
-import { db, getConnection, testConnection } from '../../src/db';
+import { Database, openDB } from '../../src/db';
 import assert from 'assert';
 import { UserService } from '../../src/services/userService';
 
 
 
 describe('Creation User', () => {
+    let db: Database;
     beforeAll(async () => {
-    const connection = await getConnection();
-    // Setup test database=
-    // Create users table for testing
-    await connection.query('CREATE TABLE IF NOT EXISTS users (id VARCHAR(36) PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), createdAt DATETIME)');
+    db = openDB();
+    await db.run('CREATE TABLE IF NOT EXISTS users (id VARCHAR(36) PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), createdAt DATETIME)');
   });
 
   afterAll(async () => {
-    // Clean up test database
-    await db.query('DROP TABLE IF EXISTS users');
-    await db.end(); // Close the pool after all tests are done
+    await db.close();
   });
     beforeEach(async () => {
         await UserService.deleteAllUsers();

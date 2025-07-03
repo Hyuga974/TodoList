@@ -1,41 +1,70 @@
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+import sqlite3 from 'sqlite3'
+import dotenv from 'dotenv'
+import { promisify } from 'util'
 
-// Load environment variables from .env file
-dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
-});
+dotenv.config()
 
-export const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+const DB_PATH = process.env.DB_PATH as string;
 
-export async function getConnection() {
-    return await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        port: 3306,
-  });
+if (!DB_PATH) {
+  throw new Error('DB_PATH environment variable is not defined')
 }
 
-export async function testConnection() {
-  try {
-    const [rows] = await db.query('SELECT 1 + 1 AS result');
-    console.log('Database connection successful. Query result:', rows);
+interface RunResult {
+  lastID: number
+  changes: number
+}
 
+class Database {
+  private db: sqlite3.Database
 
-  } catch (error) {
-    console.error('Database connection failed:', error);
-  } finally {
-    await db.end();
+  constructor() {
+    this.db = new sqlite3.Database(DB_PATH)
+  }
+
+  async run(sql: string, params: any[] = []): Promise<RunResult> {
+    return new Promise((resolve, reject) => {
+      this.db.run(sql, params, function(err) {
+        if (err) reject(err)
+        else resolve({ lastID: this.lastID, changes: this.changes })
+      })
+    })
+  }
+
+  async get<T = any>(sql: string, params: any[] = []): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.db.get(sql, params, (err, row) => {
+        if (err) reject(err)
+        else resolve(row as T)
+      })
+    })
+  }
+
+  async all<T = any>(sql: string, params: any[] = []): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      this.db.all(sql, params, (err, rows) => {
+        if (err) reject(err)
+        else resolve(rows as T[])
+      })
+    })
+  }
+
+  async exec(sql: string): Promise<void> {
+    return promisify(this.db.exec).call(this.db, sql)
+  }
+
+  close(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.db.close(err => {
+        if (err) reject(err)
+        else resolve()
+      })
+    })
   }
 }
 
+function openDB(): Database {
+  return new Database()
+}
+
+export { openDB, Database, RunResult }

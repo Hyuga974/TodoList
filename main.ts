@@ -1,8 +1,4 @@
-import {db, testConnection} from './src/db/index';
 import { TodoList } from './src/models/todoList';
-
-testConnection()
-
 
 const todoList = new TodoList();
 
