@@ -1,4 +1,8 @@
-import { TodoList } from "./todoList";
+import {db, testConnection} from './db';
+import { TodoList } from './src/models/todoList';
+
+testConnection()
+
 
 const todoList = new TodoList();
 
@@ -6,15 +10,15 @@ const todoList = new TodoList();
 const newItem = todoList.create("Buy groceries", "Milk, Bread, Eggs");
 console.log("Created Item:", newItem);
 // Read all todo items
-const items = todoList.read();
+const items = todoList.readAll();
 console.log("All Items:",items);
 // Update an existing todo item
-const updatedItem = todoList.update(newItem.id, "Buy groceries and fruits", "Milk, Bread, Eggs, Apples", "progress");
+const updatedItem = todoList.update(newItem.id, "Buy groceries and fruits", "Milk, Bread, Eggs, Apples");
 console.log("Updated Item:", updatedItem);
 // Delete a todo item
 const deleteResult = todoList.delete(newItem.id);
 console.log("Delete Result:", deleteResult);    
 // Read all todo items after deletion
-const itemsAfterDelete = todoList.read();
+const itemsAfterDelete = todoList.readAll();
 console.log("Items After Deletion:", itemsAfterDelete);
 
