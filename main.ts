@@ -1,4 +1,4 @@
-import {db, testConnection} from './db';
+import {db, testConnection} from './src/db/index';
 import { TodoList } from './src/models/todoList';
 
 testConnection()

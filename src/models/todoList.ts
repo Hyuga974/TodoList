@@ -33,9 +33,6 @@ export class TodoList {
 
     readAll(): TodoItem[] {
         //console.log("Reading all tasks...");
-        if (this.items.length === 0) {
-            throw new Error("No tasks available");
-        }
         return [...this.items];
     }
 

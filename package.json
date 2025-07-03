@@ -1,13 +1,19 @@
 {
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.8",
-    "jest": "^30.0.3",
+    "@types/node": "^24.0.10",
+    "jest": "^30.0.4",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "env": "^0.0.2",
+    "mysql2": "^3.14.1"
   }
 }

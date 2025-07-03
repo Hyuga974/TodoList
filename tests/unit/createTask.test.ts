@@ -22,7 +22,7 @@ let todoList: TodoList;
 let todoItem : TodoItem
 let todoItem2 : TodoItem
 
-describe('TodoList', () => {
+describe('Create Task', () => {
     let todoList : TodoList;
     beforeEach(() => {
         todoList = new TodoList();
