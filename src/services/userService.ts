@@ -2,6 +2,7 @@ import { User } from '../models/user';
 import { UserRepository } from '../repository/userRepository';
 
 export class UserService {
+    
   static validateName(name: string): boolean {
     return name.trim() !== '' && name.length <= 50;
   }
@@ -29,7 +30,17 @@ export class UserService {
         }
     }
 
-  static async deleteAllUsers(): Promise<void> {
-    await UserRepository.deleteAll();
-  }
+    static async listUsers() : Promise<User[]> {
+        try {
+            const users = await UserRepository.listAll();
+            console.log("Users retrieved:", users);
+            return users;
+        } catch (error) {
+            throw new Error('Error retrieving users: ' + (error as Error).message);
+        }
+    }
+
+    static async deleteAllUsers(): Promise<void> {
+        await UserRepository.deleteAll();
+    }
 }

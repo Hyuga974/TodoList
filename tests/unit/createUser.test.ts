@@ -29,16 +29,12 @@ describe('Creation User', () => {
             email VARCHAR(255) UNIQUE,
             createdAt DATETIME
             )`);
-
-        // Log the schema to verify the unique constraint
-        const tableInfo = await db.all("PRAGMA table_info(users)");
-        console.log("Table schema:", tableInfo);
-        });
+    });
 
 
-  afterAll(async () => {
-    await db.close();
-  });
+    afterAll(async () => {
+        await db.close();
+    });
     beforeEach(async () => {
         await UserService.deleteAllUsers();
         await UserService.createUser("John Doe", "john.doe@mail.com");

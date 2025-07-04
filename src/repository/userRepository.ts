@@ -3,6 +3,7 @@ import { openDB } from '../db/index';
 import crypto from 'crypto';
 
 export class UserRepository {
+
   static db = openDB();
 
   static async create(name: string, email: string): Promise<User> {
@@ -24,6 +25,14 @@ export class UserRepository {
 
   static async deleteAll(): Promise<void> {
     await this.db.run('DELETE FROM users');
+  }
+
+  static async  listAll(): Promise<User[]> {
+    try{
+      return await this.db.all<User>('SELECT * FROM users ORDER BY name ASC');
+    } catch (error) {
+      throw new Error('Error retrieving users: ' + (error as Error).message);
+    }
   }
 
 }
