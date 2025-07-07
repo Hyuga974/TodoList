@@ -1,5 +1,5 @@
 import { User } from '../models/user';
-import { UserRepository } from '../repository/userRepository';
+import { UserRepository } from '../repositories/userRepository';
 
 export class UserService {
     
@@ -33,7 +33,6 @@ export class UserService {
     static async listUsers() : Promise<User[]> {
         try {
             const users = await UserRepository.listAll();
-            console.log("Users retrieved:", users);
             return users;
         } catch (error) {
             throw new Error('Error retrieving users: ' + (error as Error).message);

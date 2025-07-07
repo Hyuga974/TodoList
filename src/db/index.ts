@@ -18,8 +18,8 @@ interface RunResult {
 class Database {
   private db: sqlite3.Database
 
-  constructor() {
-    this.db = new sqlite3.Database(DB_PATH)
+  constructor(dbPath: string = DB_PATH) {
+    this.db = new sqlite3.Database(dbPath)
   }
 
   async run(sql: string, params: any[] = []): Promise<RunResult> {
@@ -63,8 +63,8 @@ class Database {
   }
 }
 
-function openDB(): Database {
-  return new Database()
+function openDB(testDbPath?: string): Database {
+  return testDbPath ? new Database(testDbPath) : new Database();
 }
 
 export { openDB, Database, RunResult }

@@ -1,4 +1,4 @@
-import { TodoList } from './src/models/todoList';
+import { TodoList } from './src/services/todoList';
 
 const todoList = new TodoList();
 

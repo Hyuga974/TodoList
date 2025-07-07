@@ -12,9 +12,9 @@
 
 */
 
-import { Database, openDB } from '../../src/db';
+import { Database, openDB } from '../../../src/db';
 import assert from 'assert';
-import { UserService } from '../../src/services/userService';
+import { UserService } from '../../../src/services/userService';
 
 
 

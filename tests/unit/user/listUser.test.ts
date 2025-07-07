@@ -9,9 +9,9 @@
 - **ÉTANT DONNÉ QUE** je n'ai aucun utilisateur, **LORSQUE** je demande la liste, **ALORS** j'obtiens une liste vide
 - **ÉTANT DONNÉ QUE** je demande la liste des utilisateurs, **LORSQUE** j'exécute la requête, **ALORS** les utilisateurs sont triés par nom par défaut
 */
-import { Database, openDB } from '../../src/db';
+import { Database, openDB } from '../../../src/db';
 import assert from 'assert';
-import { UserService } from '../../src/services/userService';
+import { UserService } from '../../../src/services/userService';
 
 
 
@@ -29,7 +29,6 @@ describe('Creation User', () => {
 
         // Log the schema to verify the unique constraint
         const tableInfo = await db.all("PRAGMA table_info(users)");
-        console.log("Table schema:", tableInfo);
         });
 
 
